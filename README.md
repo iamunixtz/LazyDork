@@ -1,0 +1,2 @@
+# LazyDork
+Google Dorking tool
