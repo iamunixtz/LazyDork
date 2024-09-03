@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Dork Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+         .____                           ________                __
+             |    |   _____  ___________.__. \______ \   ___________|  | __
+             |    |   \__  \ \___   <   |  |  |    |  \ /  _ \_  __ \  |/ /
+             |    |___ / __ \_/    / \___  |  |    `   (  <_> )  | \/    < 
+             |_______ (____  /_____ \/ ____| /_______  /\____/|__|  |__|_ \
+                     \/    \/      \/\/              \/                  \/    
+            </h1>
+        </header>
+        <div class="input-section">
+            <label for="domainInput">Enter Domain:</label>
+            <input type="text" id="domainInput" placeholder="example.com">
+            
+            <label for="dorkSelect">Select Dork Category:</label>
+            <select id="dorkSelect">
+                <option value="SQL Injection">SQL Injection</option>
+                <option value="WordPress">WordPress</option>
+                <option value="Joomla">Joomla</option>
+                <option value="Web3">Web3</option>
+                <option value="Swagger API">Swagger API</option>
+                <option value="Laravel">Laravel</option>
+                <option value="LFI">Local File Inclusion (LFI)</option>
+                <option value="Files and Juicy Files">Files and Juicy Files</option>
+                <option value="Program and Bug Bounty">Program and Bug Bounty</option>
+                <option value="Admin Panel">Admin Panel</option>
+                <option value="Portal">Portal</option>
+                <option value="API Keys">API Keys</option>
+                <option value="SSH Keys">SSH Keys</option>
+                <option value="Configuration Files">Configuration Files</option>
+            </select>
+
+            <button id="generateDorkButton">Generate Dork</button>
+            <button id="playSoundButton">Play Sound</button>
+        </div>
+
+        <div class="dork-list">
+            <h2>Generated Dorks:</h2>
+            <ul id="dorkList">
+                <!-- Generated dorks will be listed here -->
+            </ul>
+        </div>
+    </div>
+
+    <audio id="backgroundMusic" src="Get Phished _ Mr. Robot.mp3" preload="auto"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
