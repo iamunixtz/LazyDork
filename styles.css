@@ -1,106 +1,202 @@
-/* Basic reset and body styling */
+/* Global Styles */
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #0d0d0d;
-    color: #33ff33;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
 }
 
 .container {
-    width: 80%;
-    margin: auto;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
-header {
+/* Title Section */
+header h1 {
+    text-align: center;
+    font-size: 36px;
+    color: #333;
+}
+
+/* Domain Input Section */
+.input-section {
     text-align: center;
     margin-bottom: 20px;
 }
 
-h1 {
-    color: #00ff00;
-    font-size: 1.5em;
-    line-height: 1.2;
-    white-space: pre;
-}
-
-.input-section {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin: 10px 0 5px;
-}
-
-input[type="text"], select, button {
+.input-section input {
     padding: 10px;
-    border: none;
-    border-radius: 5px;
+    font-size: 16px;
+    width: 250px;
     margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-input[type="text"] {
-    width: calc(100% - 22px);
+/* Search Button */
+.input-section button {
+    padding: 10px;
     background-color: #333;
-    color: #0f0;
-    border: 1px solid #0f0;
-}
-
-select {
-    background-color: #333;
-    color: #0f0;
-    border: 1px solid #0f0;
-}
-
-button {
-    background-color: #00ff00;
-    color: #000;
+    border: none;
     cursor: pointer;
-    border: 1px solid #0f0;
+    display: inline-block;
+    border-radius: 5px;
 }
 
-button:hover {
-    background-color: #00cc00;
+/* Search Icon inside the button */
+.search-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
 }
 
-.dork-list {
+/* Hover effect for the button */
+.input-section button:hover {
+    background-color: #444;
+}
+
+/* Dork Category Section */
+.dork-category-section {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.dork-category-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.category-logo {
+    width: 120px;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.category-logo img {
+    width: 50px;
+    height: 50px;
+}
+
+.category-logo p {
+    font-size: 14px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.category-logo:hover {
+    background-color: #eee;
+    transform: scale(1.05);
+}
+
+/* Footer */
+.footer {
+    padding: 30px 20px;
+    margin-top: 40px;
+}
+
+/* Footer Content */
+.footer-content {
+    text-align: center;
+}
+
+.footer-text p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.footer-text a {
+    color: #f39c12;
+    text-decoration: none;
+}
+
+.footer-text a:hover {
+    color: #fff;
+}
+
+/* Footer Links - GitHub and Donate Buttons */
+.footer-links {
     margin-top: 20px;
 }
 
-.dork-list h2 {
-    color: #00ff00;
-    text-align: center;
-    font-size: 2em;
-}
-
-.dork-list ul {
-    list-style: none;
-    padding: 0;
-}
-
-.dork-list li {
+.github-link,
+.donate-button {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
     background-color: #333;
-    color: #0f0;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    border: 1px solid #00ff00;
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.dork-list li:hover {
-    background-color: #444;
-    transform: scale(1.02);
-}
-
-button {
-    margin-top: 10px;
     padding: 10px 20px;
-    font-size: 16px;
+    border-radius: 5px;
+    margin: 10px;
+    transition: background-color 0.3s;
+}
+
+.github-link:hover,
+.donate-button:hover {
+    background-color: #444;
+}
+
+/* GitHub Icon Styling */
+.github-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Donate Icon Styling */
+.donate-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Footer Logos Section */
+.footer-logos {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-logos .category-logo {
+    width: 100px;
+    margin: 10px;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+}
+
+.footer-logos .category-logo img {
+    width: 40px;
+    height: 40px;
+}
+
+.footer-logos .category-logo p {
+    display: none; /* Hide text for logos in footer */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .footer-logos {
+        flex-direction: column;
+    }
+
+    .footer-text p {
+        font-size: 12px;
+    }
+
+    .footer-links {
+        display: block;
+        margin-top: 20px;
+    }
 }
