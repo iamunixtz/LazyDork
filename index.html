@@ -2,55 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+        <link rel="icon" href="images/lazydork.ico" type="image/x-icon"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Dork Generator</title>
+    <title>Lazy Dork Generator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
+        <!-- Title Section -->
         <header>
-            <h1>
-         .____                           ________                __
-             |    |   _____  ___________.__. \______ \   ___________|  | __
-             |    |   \__  \ \___   <   |  |  |    |  \ /  _ \_  __ \  |/ /
-             |    |___ / __ \_/    / \___  |  |    `   (  <_> )  | \/    < 
-             |_______ (____  /_____ \/ ____| /_______  /\____/|__|  |__|_ \
-                     \/    \/      \/\/              \/                  \/    
-            </h1>
+            <h1>Lazy Dork</h1>
         </header>
-        <div class="input-section">
-            <label for="domainInput">Enter Domain:</label>
-            <input type="text" id="domainInput" placeholder="example.com">
-            
-            <label for="dorkSelect">Select Dork Category:</label>
-            <select id="dorkSelect">
-                <option value="SQL Injection">SQL Injection</option>
-                <option value="WordPress">WordPress</option>
-                <option value="Joomla">Joomla</option>
-                <option value="Web3">Web3</option>
-                <option value="Swagger API">Swagger API</option>
-                <option value="Laravel">Laravel</option>
-                <option value="LFI">Local File Inclusion (LFI)</option>
-                <option value="Files and Juicy Files">Files and Juicy Files</option>
-                <option value="Program and Bug Bounty">Program and Bug Bounty</option>
-                <option value="Admin Panel">Admin Panel</option>
-                <option value="Portal">Portal</option>
-                <option value="API Keys">API Keys</option>
-                <option value="SSH Keys">SSH Keys</option>
-                <option value="Configuration Files">Configuration Files</option>
-            </select>
 
-            <button id="generateDorkButton">Generate Dork</button>
-            <button id="playSoundButton">Play Sound</button>
+        <!-- Domain Input & Generate Button Section -->
+        <div class="input-section">
+            <input type="text" id="domainInput" placeholder="example.com">
+            <button id="generateDorkButton">
+                <img src="images/search-icon.png" alt="Search Icon" class="search-icon">
+            </button>
         </div>
 
-        <div class="dork-list">
-            <h2>Generated Dorks:</h2>
-            <ul id="dorkList">
-                <!-- Generated dorks will be listed here -->
-            </ul>
+        <!-- Dork Category Section with Logos -->
+        <div class="dork-category-section">
+            <div class="dork-category-logos">
+                <!-- Category Logos -->
+                <div class="category-logo" data-category="SQL Injection">
+                    <img src="images/sql-logo.png" alt="SQL Injection Logo">
+                    <p>SQL Injection</p>
+                </div>
+                <div class="category-logo" data-category="WordPress">
+                    <img src="images/wp-logo.png" alt="WordPress Logo">
+                    <p>WordPress</p>
+                </div>
+                <div class="category-logo" data-category="Joomla">
+                    <img src="images/joomla-logo.png" alt="Joomla Logo">
+                    <p>Joomla</p>
+                </div>
+                <div class="category-logo" data-category="Web3">
+                    <img src="images/web3-logo.png" alt="Web3 Logo">
+                    <p>Web3</p>
+                </div>
+                <div class="category-logo" data-category="Swagger API">
+                    <img src="images/swagger-logo.png" alt="Swagger API Logo">
+                    <p>Swagger API</p>
+                </div>
+                <div class="category-logo" data-category="Laravel">
+                    <img src="images/laravel-logo.png" alt="Laravel Logo">
+                    <p>Laravel</p>
+                </div>
+                <div class="category-logo" data-category="LFI">
+                    <img src="images/lfi-logo.png" alt="Local File Inclusion Logo">
+                    <p>LFI</p>
+                </div>
+                <div class="category-logo" data-category="Files and Juicy Files">
+                    <img src="images/files-logo.png" alt="Files Logo">
+                    <p>Files</p>
+                </div>
+                <div class="category-logo" data-category="SQL Injection">
+                <img src="images/sql-logo.png" alt="SQL Injection Logo">
+                <p>SQL Injection</p>
+            </div>
+            <div class="category-logo" data-category="WordPress">
+                <img src="images/wp-logo.png" alt="WordPress Logo">
+                <p>WordPress</p>
+            </div>
+            <div class="category-logo" data-category="Joomla">
+                <img src="images/joomla-logo.png" alt="Joomla Logo">
+                <p>Joomla</p>
+            </div>
+            <div class="category-logo" data-category="Web3">
+                <img src="images/web3-logo.png" alt="Web3 Logo">
+                <p>Web3</p>
+            </div>
+            <div class="category-logo" data-category="Swagger API">
+                <img src="images/swagger-logo.png" alt="Swagger API Logo">
+                <p>Swagger API</p>
+            </div>
+            <div class="category-logo" data-category="Unsecured File Uploads">
+    <img src="upload-logo.png" alt="Unsecured File Uploads Logo">
+    <p>Unsecured File Uploads</p>
+</div>
+<div class="category-logo" data-category="Misconfigured Cloud Storage">
+    <img src="images/cloud-storage-logo.png" alt="Misconfigured Cloud Storage Logo">
+    <p>Misconfigured Cloud Storage</p>
+</div>
+<div class="category-logo" data-category="Sensitive Company Information">
+    <img src="images/company-info-logo.png" alt="Sensitive Company Information Logo">
+    <p>Sensitive Company Information</p>
+</div>
+<div class="category-logo" data-category="Vulnerable Software Versions">
+    <img src="images/software-vuln-logo.png" alt="Vulnerable Software Versions Logo">
+    <p>Vulnerable Software Versions</p>
+</div>
+<div class="category-logo" data-category="Social Security Numbers">
+    <img src="images/ssn-logo.png" alt="Social Security Numbers Logo">
+    <p>Social Security Numbers</p>
+</div>
+<div class="category-logo" data-category="Unprotected Archives">
+    <img src="images/archives-logo.png" alt="Unprotected Archives Logo">
+    <p>Unprotected Archives</p>
+</div>
+<div class="category-logo" data-category="Web Server Information">
+    <img src="images/web-server-logo.png" alt="Web Server Information Logo">
+    <p>Web Server Information</p>
+</div>
+<div class="category-logo" data-category="Unprotected Webcams">
+    <img src="images/webcams-logo.png" alt="Unprotected Webcams Logo">
+    <p>Unprotected Webcams</p>
+</div>
+<div class="category-logo" data-category="S3 Buckets (Amazon)">
+    <img src="images/s3-logo.png" alt="S3 Buckets Logo">
+    <p>S3 Buckets (Amazon)</p>
+</div>
+<div class="category-logo" data-category="GitHub Dorks">
+    <img src="images/github-logo.png" alt="GitHub Dorks Logo">
+    <p>GitHub Dorks</p>
+</div>
+<div class="category-logo" data-category="Azure Dorks">
+    <img src="images/azure-logo.png" alt="Azure Dorks Logo">
+    <p>Azure Dorks</p>
+</div>
+<div class="category-logo" data-category="Pastebin Dorks">
+    <img src="images/pastebin-logo.png" alt="Pastebin Dorks Logo">
+    <p>Pastebin Dorks</p>
+</div>
+                <!-- Additional categories can go here -->
+            </div>
         </div>
     </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                <p><strong>Disclaimer:</strong> This tool is for educational purposes only. We do not encourage illegal activities. Please use it responsibly.</p>
+                <p><strong>Credits:</strong> Icons used are sourced from <a href="https://www.flaticon.com/" target="_blank">Flaticon</a>.</p>
+            </div>
+
+            <div class="footer-links">
+                <!-- GitHub Link with GitHub Logo -->
+                <a href="https://github.com/iamunixtz/LazyDork" target="_blank" class="github-link">
+                    <img src="images/github-logo.png" alt="GitHub Logo" class="github-icon"> GitHub
+                </a>
+
+                <!-- Donate Button -->
+                <a href="https://buymeacoffee.com/iamunixtz" target="_blank" class="donate-button">
+                    <img src="images/buymecoffe.png" alt="Donate Icon" class="donate-icon"> Donate
+                </a>
+            </div>
+        </div>
+
+        <!-- Logos in Footer (as part of the footer section) -->
+        <div class="footer-logos">
+            
+        </div>
+    </footer>
 
     <audio id="backgroundMusic" src="Get Phished _ Mr. Robot.mp3" preload="auto"></audio>
     <script src="script.js"></script>
