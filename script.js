@@ -26,7 +26,7 @@ const dorkQueries = {
     "S3 Buckets (Amazon)": (domain) => `site:s3.amazonaws.com inurl:${domain} | site:*.s3.amazonaws.com | intext:"Access Denied" site:s3.amazonaws.com | inurl:/bucket/ | inurl:/public/ | inurl:/open/ | inurl:/files/ | inurl:/data/`,
     "GitHub Dorks": (domain) => `site:github.com "password" -inurl:login | site:github.com "secret" | site:github.com "api_key" | site:github.com "token" | site:github.com "private" | site:github.com "confidential" | site:github.com "credentials"`,
     "Azure Dorks": (domain) => `site:dev.azure.com -inurl:login | site:blob.core.windows.net | intext:"secret" site:dev.azure.com | site:*.azurewebsites.net | inurl:/devops/ | inurl:/pipelines/ | inurl:/vsts/`,
-    "Pastebin Dorks": (domain) => `site:pastebin.com "api_key" site:${domain} | site:pastebin.com "password" site:${domain} | site:pastebin.com "confidential" site:${domain} | site:pastebin.com "token" site:${domain} | site:pastebin.com "secret" site:${domain}`
+    "Pastebin Dorks": (domain) => `site:pastebin.com site:${domain} | site:pastebin.com "password" site:${domain} | site:pastebin.com "token" site:${domain} | site:pastebin.com "email" site:${domain}`
 };
 
 
