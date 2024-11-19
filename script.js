@@ -1,335 +1,46 @@
-document.getElementById('generateDorkButton').addEventListener('click', function() {
-    var domain = document.getElementById('domainInput').value;
-    var dorkCategory = document.getElementById('dorkSelect').value;
+// Object mapping categories to their dork queries
+const dorkQueries = {
+    "WordPress": (domain) => `site:${domain} inurl:wp- | inurl:wp-content | inurl:wp-admin | inurl:wp-login.php | inurl:wp-includes | inurl:plugins | inurl:uploads | inurl:themes | inurl:xmlrpc.php | inurl:wp-json/ | inurl:wp-config.php | inurl:readme.html | inurl:license.txt | inurl:xmlrpc.php | inurl:wp-trackback.php | inurl:wp-comments-post.php | inurl:wp-settings.php | inurl:wp-load.php`,
+    "SQL Injection": (domain) => `site:${domain} inurl:index.php?id= | inurl:page.php?id= | inurl:item.php?id= | inurl:view.php?id= | inurl:product.php?id= | inurl:/article?id= | inurl:/news?id= | inurl:/?id= | inurl:/page?id= | inurl:search.php?q= | inurl:"error in your SQL syntax"`,
+    "Joomla": (domain) => `site:${domain} inurl:/administrator/ | inurl:/components/ | inurl:/modules/ | inurl:/plugins/ | inurl:/templates/ | inurl:/language/ | inurl:/index.php?option=com_ | inurl:/user/ | inurl:/content/ | inurl:/cache/`,
+    "Web3": (domain) => `site:${domain} inurl:/.well-known/ | inurl:/api/ | inurl:/eth/ | inurl:/web3/ | inurl:/rpc/ | inurl:/contract/ | inurl:/v3/ | inurl:/token/ | inurl:/tx/ | inurl:/blockchain/`,
+    "Swagger API": (domain) => `site:${domain} inurl:/swagger/ | inurl:/api-docs/ | inurl:/swagger-ui/ | inurl:/swagger.json | inurl:/swagger.yaml | inurl:/openapi/ | inurl:/docs/api/ | inurl:/api/v1/ | inurl:/v2/api-docs/ | inurl:/rest/`,
+    "Laravel" : (domain) => `intext:"PHP DEBUGBAR" intext:"login" site:${domain} inurl:/login intext:php laravel debugbar`,
+    "LFI": (domain) => `site:${domain} inurl:/index.php?page= | inurl:/include/ | inurl:/../ | inurl:/config/ | inurl:/etc/ | inurl:/proc/self/environ | inurl:/var/log/ | inurl:/lib/ | inurl:/boot/ | inurl:/home/`,
+    "Files and Juicy Files": (domain) => `site:${domain} inurl:/admin/ | inurl:/backup/ | inurl:/config/ | inurl:/data/ | inurl:/db/ | inurl:/secret/ | inurl:/private/ | inurl:/confidential/ | inurl:/files/ | inurl:/uploads/`,
+    "Program and Bug Bounty": (domain) => `site:${domain} inurl:/bugbounty/ | inurl:/program/ | inurl:/challenges/ | inurl:/vulnerability/ | inurl:/security/ | inurl:/report/ | inurl:/bug/ | inurl:/security-advisory/ | inurl:/findings/`,
+    "Admin Panel": (domain) => `site:${domain} inurl:/admin/ | inurl:/login/ | inurl:/dashboard/ | inurl:/administrator/ | inurl:/wp-admin/ | inurl:/cpanel/ | inurl:/manager/ | inurl:/admin-console/ | inurl:/control-panel/ | inurl:/admin-login/`,
+    "Portal": (domain) => `site:${domain} inurl:/portal/ | inurl:/login/ | inurl:/user/ | inurl:/account/ | inurl:/signin/ | inurl:/register/ | inurl:/profile/ | inurl:/dashboard/ | inurl:/member/ | inurl:/session/`,
+    "API Keys": (domain) => `site:${domain} inurl:/api/ | inurl:/keys/ | inurl:/tokens/ | inurl:/auth/ | inurl:/client_id/ | inurl:/access_key/ | inurl:/api_key/ | inurl:/secret_key/ | inurl:/config/`,
+    "SSH Keys": (domain) => `site:${domain} inurl:/ssh/ | inurl:/keys/ | inurl:/private/ | inurl:/id_rsa/ | inurl:/authorized_keys/ | inurl:/sshd_config/ | inurl:/etc/ssh/ | inurl:/root/.ssh/ | inurl:/home/.ssh/`,
+    "Configuration Files": (domain) => `site:${domain} inurl:/config/ | inurl:/settings/ | inurl:/conf/ | inurl:/configurations/ | inurl:/app_config/ | inurl:/config.json | inurl:/config.yml | inurl:/config.php | inurl:/etc/ | inurl:/config.xml`,
+    "Unsecured File Uploads": (domain) => `site:${domain} inurl:upload | inurl:/upload/ | inurl:/uploads/ | inurl:/fileupload/ | inurl:/file/ | inurl:/imageupload/ | inurl:/fileuploads/ | inurl:/media/ | inurl:/images/ | inurl:/documents/`,
+    "Misconfigured Cloud Storage": (domain) => `site:aws.amazon.com inurl:${domain} -inurl:login | site:*.s3.amazonaws.com | inurl:/public/ | inurl:/bucket/ | inurl:/private/ | inurl:/open/ | inurl:/data/ | inurl:/files/ | inurl:/documents/ | inurl:/storage/`,
+    "Sensitive Company Information": (domain) => `filetype:ppt "company name" site:${domain} | filetype:pdf "company name" site:${domain} | filetype:xls "company name" site:${domain} | inurl:"/financial/" | inurl:"/internal/" | inurl:"company report" | inurl:"confidential" | inurl:"private"`,
+    "Vulnerable Software Versions": (domain) => `intext:"version 1.0" site:${domain} | intext:"version 2.0" site:${domain} | intext:"vulnerable" site:${domain} | intext:"exploit" site:${domain} | inurl:"/version/" | inurl:"/release/"`,
+    "Social Security Numbers": (domain) => `intext:"social security number" site:${domain} | intext:"SSN" site:${domain} | inurl:"/social-security/" | inurl:"/taxes/" | inurl:"/personal-info/" | inurl:"/customer-details/"`,
+    "Unprotected Archives": (domain) => `filetype:zip site:${domain} | filetype:rar site:${domain} | filetype:tar.gz site:${domain} | filetype:7z site:${domain} | inurl:/backup/ | inurl:/archived/ | inurl:/files/ | inurl:/archives/ | inurl:/compressed/`,
+    "Online Databases": (domain) => `inurl:database site:${domain} | inurl:/db/ | inurl:/database/ | inurl:/sql/ | inurl:/data/ | inurl:/mysql/ | inurl:/postgres/ | inurl:/no-sql/`,
+    "Web Server Information": (domain) => `intitle:"Apache Status" site:${domain} | intitle:"nginx" site:${domain} | intitle:"server-status" site:${domain} | inurl:/server-status/ | inurl:/server-info/ | inurl:/status/ | inurl:/server-status?auto=on/`,
+    "Unprotected Webcams": (domain) => `inurl:viewerframe?mode=stream site:${domain} | inurl:/camera/ | inurl:/stream/ | inurl:/webcam/ | inurl:/view/ | inurl:/video/ | inurl:/live/ | inurl:/watch/`,
+    "S3 Buckets (Amazon)": (domain) => `site:s3.amazonaws.com inurl:${domain} | site:*.s3.amazonaws.com | intext:"Access Denied" site:s3.amazonaws.com | inurl:/bucket/ | inurl:/public/ | inurl:/open/ | inurl:/files/ | inurl:/data/`,
+    "GitHub Dorks": (domain) => `site:github.com "password" -inurl:login | site:github.com "secret" | site:github.com "api_key" | site:github.com "token" | site:github.com "private" | site:github.com "confidential" | site:github.com "credentials"`,
+    "Azure Dorks": (domain) => `site:dev.azure.com -inurl:login | site:blob.core.windows.net | intext:"secret" site:dev.azure.com | site:*.azurewebsites.net | inurl:/devops/ | inurl:/pipelines/ | inurl:/vsts/`,
+    "Pastebin Dorks": (domain) => `site:pastebin.com "api_key" site:${domain} | site:pastebin.com "password" site:${domain} | site:pastebin.com "confidential" site:${domain} | site:pastebin.com "token" site:${domain} | site:pastebin.com "secret" site:${domain}`
+};
 
-    var dorks = {
-         'WordPress': [
-    'inurl:"wp-content/"',
-    'inurl:"wp-admin/"',
-    'inurl:"wp-login.php"',
-    'inurl:"wp-includes/"',
-    'inurl:"wp-config.php"',
-    'intitle:"Index of /wp-content"',
-    'intitle:"Index of /wp-admin"',
-    'inurl:"/wp-content/uploads/"',
-    'inurl:"/wp-json/wp/"',
-    'inurl:"/wp-content/plugins/"',
-    'inurl:"/wp-content/themes/"',
-    'inurl:"/wp-content/languages/"',
-    'inurl:"/wp-content/cache/"',
-    'inurl:"/wp-comments-post.php"',
-    'inurl:"/xmlrpc.php"',
-    'inurl:"/wp-cron.php"',
-    'inurl:"/wp-signup.php"',
-    'inurl:"/wp-activate.php"',
-    'inurl:"/wp-trackback.php"',
-    'intitle:"Index of /wp-includes"',
-    'inurl:"/wp-sitemap.xml"',
-    'inurl:"/wp-sitemap-index.xml"',
-    'inurl:"/wp-json/oembed/1.0/embed"',
-    'inurl:"/wp-json/wp/v2/users"',
-    'inurl:"/wp-content/uploads/sucuri/sucuri.php"',
-    'inurl:"/wp-admin/admin-ajax.php"'
-],
-'Joomla': [
-    'inurl:"index.php?option=com_"',
-    'inurl:"/administrator/"',
-    'inurl:"/administrator/index.php"',
-    'inurl:"/components/com_"',
-    'inurl:"/libraries/joomla/"',
-    'inurl:"/language/en-GB/en-GB.xml"',
-    'inurl:"/templates/beez3/"',
-    'intitle:"Index of /components/com_"',
-    'intitle:"Index of /templates/"',
-    'inurl:"/modules/mod_"',
-    'inurl:"/plugins/system/"',
-    'inurl:"/plugins/content/"',
-    'inurl:"/media/com_"',
-    'inurl:"/media/system/js/"',
-    'inurl:"/templates/protostar/"',
-    'inurl:"/administrator/backups/"',
-    'inurl:"/tmp/install_"',
-    'inurl:"/configuration.php-dist"',
-    'inurl:"/logs/error.php"',
-    'inurl:"/configuration.php~"',
-    'inurl:"/joomla.xml"',
-    'inurl:"/administrator/logs/"',
-    'inurl:"/logs/joomla_update.php"',
-    'inurl:"/cache/page/"',
-    'inurl:"/cache/com_"',
-    'inurl:"/cache/mod_"',
-    'inurl:"/tmp/logs/"',
-    'inurl:"/tmp/com_"',
-    'inurl:"/tmp/module.xml"',
-    'inurl:"/logs/error.php"',
-    'inurl:"/modules/mod_"',
-    'inurl:"/templates/_system/"'
-],
 
-    'SQL Injection': [
-            'inurl:"id=" intitle:"index of"',
-            'inurl:"item.php?id="',
-            'inurl:"product.php?id="',
-            'inurl:"view_item.php?id="',
-            'inurl:"details.php?id="',
-            'inurl:"article.php?id="',
-            'inurl:"page.php?id="',
-            'inurl:"news.php?id="',
-            'inurl:"post.php?id="',
-            'inurl:"blog.php?id="'
-        ],
-        'WordPress': [
-    'inurl:"wp-content/"',
-    'inurl:"wp-admin/"',
-    'inurl:"wp-login.php"',
-    'inurl:"wp-includes/"',
-    'inurl:"wp-config.php"',
-    'intitle:"Index of /wp-content"',
-    'intitle:"Index of /wp-admin"',
-    'inurl:"/wp-content/uploads/"',
-    'inurl:"/wp-json/wp/"',
-    'inurl:"/wp-content/plugins/"',
-    'inurl:"/wp-content/themes/"',
-    'inurl:"/wp-content/languages/"',
-    'inurl:"/wp-content/cache/"',
-    'inurl:"/wp-comments-post.php"',
-    'inurl:"/xmlrpc.php"',
-    'inurl:"/wp-cron.php"',
-    'inurl:"/wp-signup.php"',
-    'inurl:"/wp-activate.php"',
-    'inurl:"/wp-trackback.php"',
-    'intitle:"Index of /wp-includes"',
-    'inurl:"/wp-sitemap.xml"',
-    'inurl:"/wp-sitemap-index.xml"',
-    'inurl:"/wp-json/oembed/1.0/embed"',
-    'inurl:"/wp-json/wp/v2/users"',
-    'inurl:"/wp-content/uploads/sucuri/sucuri.php"',
-    'inurl:"/wp-admin/admin-ajax.php"',
-    'inurl:"/readme.html" "WordPress"',
-    'inurl:"/license.txt" "WordPress"',
-    'inurl:"/wp-admin/install.php"',
-    'inurl:"/wp-admin/upgrade.php"',
-    'inurl:"/wp-content/backup-db/"',
-    'inurl:"/wp-content/advanced-cache.php"',
-    'inurl:"/wp-content/mu-plugins/"',
-    'inurl:"/wp-content/wflogs/"',
-    'inurl:"/wp-content/updraft/"',
-    'inurl:"/wp-content/wp-cache-config.php"',
-    'inurl:"/wp-content/debug.log"',
-    'inurl:"/wp-content/uploads/revslider/"',
-    'inurl:"/wp-content/uploads/backupbuddy_backups/"'
-],
+// Event listener for clicking a category logo
+document.querySelectorAll(".category-logo").forEach(function (logo) {
+    logo.addEventListener("click", function () {
+        const category = logo.getAttribute("data-category");
+        const domain = document.getElementById("domainInput").value.trim();
 
-        'Files and Juicy Files': [
-            'intitle:"index of" (config|configuration|settings) filetype:conf',
-            'intitle:"index of" .env',
-            'intitle:"index of" backup',
-            'intitle:"index of" db_backup',
-            'intitle:"index of" dump.sql',
-            'intitle:"index of" database_backup',
-            'intitle:"index of" backup.sql',
-            'intitle:"index of" db_dump',
-            'intitle:"index of" configuration',
-            'intitle:"index of" secrets'
-        ],
-        'Program and Bug Bounty': [
-            'inurl:"/bug-bounty/" OR inurl:"/security/" intitle:"bug bounty"',
-            'inurl:"/bug-bounty-program" intitle:"bug bounty"',
-            'inurl:"/vulnerability" intitle:"bug bounty"',
-            'inurl:"/security-program" intitle:"bug bounty"',
-            'inurl:"/report" intitle:"bug bounty"',
-            'inurl:"/security" intitle:"bug bounty"',
-            'inurl:"/vuln" intitle:"bug bounty"',
-            'inurl:"/responsible-disclosure" intitle:"bug bounty"',
-            'inurl:"/security/bug-bounty"',
-            'inurl:"/bounties" intitle:"bug bounty"'
-        ],
-        'Admin Panel': [
-            'intitle:"admin" OR intitle:"administration" OR inurl:"/admin" OR inurl:"/admin/"',
-            'intitle:"admin panel" OR inurl:"/admin"',
-            'intitle:"administration" OR inurl:"/admin_login"',
-            'inurl:"/admin/dashboard"',
-            'inurl:"/admincp"',
-            'inurl:"/admin_area"',
-            'inurl:"/admin/login"',
-            'inurl:"/admin_panel"',
-            'inurl:"/admin/" intitle:"login"',
-            'inurl:"/admin/" intitle:"admin"'
-        ],
-        'Portal': [
-            'intitle:"login" OR intitle:"sign in" OR inurl:"/login" OR inurl:"/signin"',
-            'intitle:"user login" OR intitle:"login page"',
-            'inurl:"/user/login"',
-            'inurl:"/login.php"',
-            'inurl:"/login.jsp"',
-            'inurl:"/signin"',
-            'intitle:"portal" inurl:"/login"',
-            'intitle:"account" inurl:"/login"',
-            'intitle:"sign in" inurl:"/auth"',
-            'inurl:"/admin/login"'
-        ],
-        'API Keys': [
-            'intitle:"index of" api_key OR "api_key" OR "apikey" filetype:txt',
-            'intitle:"index of" "api_secret" filetype:txt',
-            'intitle:"index of" "access_token" filetype:txt',
-            'intitle:"index of" "API_KEY" filetype:txt',
-            'intitle:"index of" "api_token" filetype:txt',
-            'intitle:"index of" "api_key" filetype:json',
-            'intitle:"index of" "apikey" filetype:json',
-            'intitle:"index of" "api_secret" filetype:json',
-            'intitle:"index of" "access_token" filetype:json',
-            'intitle:"index of" "api_credentials" filetype:txt'
-        ],
-        'Swagger API': [
-    'inurl:"/swagger.json"',
-    'inurl:"/swagger-ui.html"',
-    'inurl:"/swagger-resources"',
-    'inurl:"/api-docs/"',
-    'inurl:"/v2/api-docs"',
-    'inurl:"/swagger-resources/configuration/ui"',
-    'inurl:"/swagger-resources/configuration/security"',
-    'inurl:"/v2/api-docs?group="',
-    'inurl:"/swagger-resources/configuration/ui"',
-    'intitle:"swagger ui" "api documentation"',
-    'inurl:"/swagger/swagger-ui.js"',
-    'inurl:"/swagger-ui/dist/"',
-    'inurl:"/swagger-ui/index.html"',
-    'inurl:"/api-docs/index.html"',
-    'intitle:"swagger ui" intext:"basePath"',
-    'inurl:"/swagger-resources" ext:json',
-    'inurl:"/v2/swagger.json"',
-    'inurl:"/swagger-config.json"',
-    'inurl:"/swagger-ui/swagger-ui.css"',
-    'inurl:"/swagger/swagger-ui.css"',
-    'inurl:"/api-docs/swagger-config"',
-    'intitle:"Index of /swagger/"',
-    'intitle:"Index of /api-docs/"',
-    'inurl:"/swagger/v1/swagger.json"',
-    'inurl:"/swagger/docs/v1"',
-    'inurl:"/swagger/v1/swagger.yaml"'
-],
-'Web3': [
-    'inurl:"/web3.js"',
-    'inurl:"/web3.min.js"',
-    'inurl:"/contracts/ABI"',
-    'inurl:"/contracts/*.json"',
-    'inurl:"/build/contracts/*.json"',
-    'inurl:"/truffle-config.js"',
-    'inurl:"/truffle.js"',
-    'inurl:"/ganache-cli"',
-    'inurl:"/openzeppelin/contracts"',
-    'inurl:"/solc/v0.4.24+commit.e67f0147.js"',
-    'inurl:"/web3-provider-engine"',
-    'inurl:"/ethers.js"',
-    'inurl:"/dapp.js"',
-    'inurl:"/blockchain.js"',
-    'inurl:"/mainnet.json"',
-    'inurl:"/rinkeby.json"',
-    'inurl:"/ropsten.json"',
-    'inurl:"/etherscan-api-key"',
-    'inurl:"/privatekey.txt"',
-    'inurl:"/mnemonic.txt"',
-    'inurl:"/walletconnect.html"',
-    'inurl:"/metamask.html"',
-    'inurl:"/wallet.json"',
-    'inurl:"/contract-deploy.js"',
-    'inurl:"/infura-token"',
-    'inurl:"/wallets/"',
-    'inurl:"/keys.json"',
-    'inurl:"/keys.js"',
-    'intitle:"Index of /web3/"',
-    'intitle:"Index of /wallets/"',
-    'intitle:"Index of /contracts/"',
-    'inurl:"/eth.js"',
-    'inurl:"/erc20.js"',
-    'inurl:"/erc721.js"',
-    'inurl:"/erc1155.js"',
-    'inurl:"/contracts/Migrations.sol"',
-    'inurl:"/contracts/SimpleStorage.sol"',
-    'inurl:"/chainlink/contracts"',
-    'inurl:"/uniswap/contracts"',
-    'inurl:"/blockchain/*.sol"',
-    'inurl:"/wallets.json"'
-],
+        // Generate dork
+        const dork = dorkQueries[category](domain);
+        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(dork)}`;
 
-'Laravel': [
-    'inurl:"/storage/logs/laravel.log"',
-    'inurl:"/vendor/phpunit/phpunit/src/Framework/TestCase.php"',
-    'inurl:"/artisan"',
-    'inurl:"/server.php"',
-    'inurl:"/env"',
-    'inurl:"/public/index.php"',
-    'inurl:"/routes/web.php"',
-    'inurl:"/routes/api.php"',
-    'inurl:"/storage/framework/cache/data/"',
-    'inurl:"/bootstrap/cache"',
-    'inurl:"/config/app.php"',
-    'inurl:"/config/database.php"',
-    'inurl:"/resources/views/welcome.blade.php"',
-    'inurl:"/resources/views/errors/404.blade.php"',
-    'inurl:"/app/Http/Controllers/"',
-    'inurl:"/storage/app/public/"',
-    'intitle:"Index of /storage/logs/"',
-    'inurl:"/public/.htaccess"',
-    'inurl:"/public/mix-manifest.json"',
-    'inurl:"/config/session.php"',
-    'inurl:"/resources/lang/en/validation.php"',
-    'inurl:"/resources/js/app.js"',
-    'inurl:"/composer.json"',
-    'inurl:"/composer.lock"',
-    'inurl:"/bootstrap/cache/config.php"',
-    'inurl:"/database/migrations/"',
-    'inurl:"/tests/TestCase.php"',
-    'inurl:"/tests/CreatesApplication.php"',
-    'inurl:"/routes/console.php"',
-    'inurl:"/routes/channels.php"',
-    'inurl:"/storage/framework/views/"'
-],
-
-        'SSH Keys': [
-            'intitle:"index of" id_rsa OR "id_rsa" filetype:txt',
-            'intitle:"index of" id_dsa OR "id_dsa" filetype:txt',
-            'intitle:"index of" id_ecdsa OR "id_ecdsa" filetype:txt',
-            'intitle:"index of" id_ed25519 OR "id_ed25519" filetype:txt',
-            'intitle:"index of" authorized_keys',
-            'intitle:"index of" "ssh_key" filetype:txt',
-            'intitle:"index of" "ssh_private_key" filetype:txt',
-            'intitle:"index of" "ssh_public_key" filetype:txt',
-            'intitle:"index of" "private_key" filetype:txt',
-            'intitle:"index of" "ssh" filetype:txt'
-        ],
-        'Configuration Files': [
-            'intitle:"index of" (config|configurations|config.php|database) filetype:php',
-            'intitle:"index of" config filetype:conf',
-            'intitle:"index of" configuration filetype:json',
-            'intitle:"index of" config.yaml',
-            'intitle:"index of" config.xml',
-            'intitle:"index of" settings.php',
-            'intitle:"index of" db_config',
-            'intitle:"index of" app_config',
-            'intitle:"index of" configuration.yml',
-            'intitle:"index of" settings.xml'
-        ]
-    };
-
-    var selectedDorks = dorks[dorkCategory] || [];
-    var dorkList = document.getElementById('dorkList');
-    dorkList.innerHTML = ''; // Clear previous dorks
-
-    selectedDorks.forEach(function(dork) {
-        var listItem = document.createElement('li');
-        listItem.textContent = `site:*.${domain} ${dork}`;
-        dorkList.appendChild(listItem);
+        // Open the search URL in a new tab
+        window.open(searchUrl, '_blank');
     });
-});
-
-document.getElementById('playSoundButton').addEventListener('click', function() {
-    var audio = document.getElementById('backgroundMusic');
-    if (audio.paused) {
-        audio.play();
-        this.textContent = 'Pause Sound';
-    } else {
-        audio.pause();
-        this.textContent = 'Play Sound';
-    }
 });
