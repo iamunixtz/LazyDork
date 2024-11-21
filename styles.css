@@ -25,7 +25,7 @@ header h1 {
     margin-bottom: 20px;
 }
 
-.input-section input {
+.input-section .domain-input {
     padding: 10px;
     font-size: 16px;
     width: 250px;
@@ -42,6 +42,7 @@ header h1 {
     cursor: pointer;
     display: inline-block;
     border-radius: 5px;
+    margin-left: 10px;
 }
 
 /* Search Icon inside the button */
