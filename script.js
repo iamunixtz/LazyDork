@@ -37,10 +37,13 @@ document.querySelectorAll(".category-logo").forEach(function (logo) {
         const domain = document.getElementById("domainInput").value.trim();
 
         // Generate dork
-        const dork = dorkQueries[category](domain);
-        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(dork)}`;
+        const dork = encodeURIComponent(dorkQueries[category](domain));
+        const gglSearchUrl = `https://www.google.com/search?q=${dork}`;
+        const ydxSearchUrl = `https://yandex.com/search/?text=${dork}`;
+		
+		const ydx = document.querySelector("#useYandex").checked;
 
         // Open the search URL in a new tab
-        window.open(searchUrl, '_blank');
+        window.open(ydx? ydxSearchUrl: gglSearchUrl, '_blank');
     });
 });
